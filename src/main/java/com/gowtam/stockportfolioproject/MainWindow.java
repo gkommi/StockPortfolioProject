@@ -27,17 +27,22 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        openPortfolioButton = new javax.swing.JButton();
+        createPortfolioButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Open Portfolio");
-
-        jButton2.setText("jButton2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        openPortfolioButton.setText("Open Portfolio");
+        openPortfolioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                openPortfolioButtonActionPerformed(evt);
+            }
+        });
+
+        createPortfolioButton.setText("Create Portfolio");
+        createPortfolioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createPortfolioButtonActionPerformed(evt);
             }
         });
 
@@ -46,28 +51,38 @@ public class MainWindow extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(86, 86, 86)
-                .addComponent(jButton1)
-                .addGap(73, 73, 73)
-                .addComponent(jButton2)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addGap(76, 76, 76)
+                .addComponent(openPortfolioButton)
+                .addGap(43, 43, 43)
+                .addComponent(createPortfolioButton)
+                .addContainerGap(67, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(128, 128, 128)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(openPortfolioButton)
+                    .addComponent(createPortfolioButton))
                 .addContainerGap(149, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void createPortfolioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createPortfolioButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        chooseFileLocation create = new chooseFileLocation();
+        create.setBrowseType("Create");
+        create.setVisible(true);
+    }//GEN-LAST:event_createPortfolioButtonActionPerformed
+
+    private void openPortfolioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openPortfolioButtonActionPerformed
+        // TODO add your handling code here:
+        chooseFileLocation second = new chooseFileLocation();
+        second.setBrowseType("Open");
+        second.setVisible(true);
+    }//GEN-LAST:event_openPortfolioButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -105,7 +120,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton createPortfolioButton;
+    private javax.swing.JButton openPortfolioButton;
     // End of variables declaration//GEN-END:variables
 }
