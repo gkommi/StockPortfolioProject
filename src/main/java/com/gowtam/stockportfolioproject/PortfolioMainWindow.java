@@ -5,7 +5,16 @@
  */
 package com.gowtam.stockportfolioproject;
 
+import java.time.LocalDate;
 import javax.swing.JFrame;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -48,17 +57,19 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
         dateOpenedBox = new javax.swing.JTextField();
         numberOfStocksBox = new javax.swing.JTextField();
         folderLocationBox = new javax.swing.JTextField();
-        savePortfolio = new javax.swing.JButton();
-        marketClosingPrices = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         manageStockTrades = new javax.swing.JButton();
-        stockTradesLabel = new javax.swing.JLabel();
-        calculateButton = new javax.swing.JButton();
-        startDateLabel = new javax.swing.JLabel();
-        startDateField = new javax.swing.JTextField();
+        marketClosingPrices = new javax.swing.JButton();
+        savePortfolio = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         endDateLabel = new javax.swing.JLabel();
         endDateField = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         stocksDataTable = new javax.swing.JTable();
+        stockTradesLabel = new javax.swing.JLabel();
+        calculateButton = new javax.swing.JButton();
+        startDateLabel = new javax.swing.JLabel();
+        startDateField = new javax.swing.JTextField();
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -113,15 +124,19 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
 
         folderLabel.setText("Folder");
 
-        nameBox.setText("jTextField1");
+        nameBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nameBoxActionPerformed(evt);
+            }
+        });
 
-        descriptionBox.setText("jTextField2");
+        accountNumberBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accountNumberBoxActionPerformed(evt);
+            }
+        });
 
-        accountNumberBox.setText("jTextField3");
-
-        dateOpenedBox.setText("jTextField4");
-
-        numberOfStocksBox.setText("jTextField5");
+        numberOfStocksBox.setEditable(false);
 
         folderLocationBox.setEditable(false);
         folderLocationBox.addActionListener(new java.awt.event.ActionListener() {
@@ -135,36 +150,26 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(folderLabel)
-                        .addGap(42, 42, 42)
-                        .addComponent(folderLocationBox))
+                    .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(descriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(accountNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dateOpenedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(numberOfStocksLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(folderLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(folderLocationBox)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(dateOpenedLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(dateOpenedBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(nameBox, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(descriptionBox, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(accountNumberBox, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(accountNumberLabel)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(accountNumberBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(nameLabel)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(nameBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(descriptionLabel)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(descriptionBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(numberOfStocksLabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(numberOfStocksBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 296, Short.MAX_VALUE)))
+                                .addComponent(numberOfStocksBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                                .addComponent(dateOpenedBox, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addGap(0, 305, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -194,22 +199,60 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(folderLabel)
                     .addComponent(folderLocationBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
-        savePortfolio.setText("Save Portfolio");
+        manageStockTrades.setText("Manage Stock Trades");
+        manageStockTrades.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manageStockTradesActionPerformed(evt);
+            }
+        });
 
         marketClosingPrices.setText("Market Closing Prices");
+        marketClosingPrices.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                marketClosingPricesActionPerformed(evt);
+            }
+        });
 
-        manageStockTrades.setText("Manage Stock Trades");
+        savePortfolio.setText("Save Portfolio");
+        savePortfolio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                savePortfolioActionPerformed(evt);
+            }
+        });
 
-        stockTradesLabel.setText("Stock Trades:");
-
-        calculateButton.setText("Calculate");
-
-        startDateLabel.setText("Start Date:");
-
-        startDateField.setText("jTextField7");
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(manageStockTrades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(marketClosingPrices, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(savePortfolio, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(marketClosingPrices)
+                .addGap(18, 18, 18)
+                .addComponent(manageStockTrades)
+                .addGap(38, 38, 38))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(savePortfolio)
+                    .addContainerGap(241, Short.MAX_VALUE)))
+        );
 
         endDateLabel.setText("End Date:");
 
@@ -232,6 +275,64 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(stocksDataTable);
 
+        stockTradesLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        stockTradesLabel.setText("Stock Trades:");
+
+        calculateButton.setText("Calculate");
+        calculateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calculateButtonActionPerformed(evt);
+            }
+        });
+
+        startDateLabel.setText("Start Date:");
+
+        startDateField.setText("jTextField7");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(322, 322, 322)
+                .addComponent(startDateLabel)
+                .addGap(18, 18, 18)
+                .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(endDateLabel)
+                .addGap(18, 18, 18)
+                .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(calculateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(stockTradesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 921, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(startDateLabel)
+                    .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(endDateLabel)
+                    .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calculateButton))
+                .addContainerGap(282, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(stockTradesLabel)
+                    .addGap(18, 18, 18)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -239,58 +340,22 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(37, 37, 37)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(savePortfolio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(manageStockTrades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(marketClosingPrices, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(stockTradesLabel)
-                                .addGap(23, 23, 23)
-                                .addComponent(startDateLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(endDateLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(calculateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(20, 20, 20))))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(savePortfolio)
-                        .addGap(127, 127, 127)
-                        .addComponent(marketClosingPrices)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(manageStockTrades))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(stockTradesLabel)
-                    .addComponent(startDateLabel)
-                    .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(endDateLabel)
-                    .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(calculateButton))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(6, 6, 6))
         );
 
         pack();
@@ -298,19 +363,151 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
 
     private String _folder;
     private String _openType;
-    public void initialize(String openType, String folder){
+    private Portfolio _portfolio;
+    public boolean initialize(String openType, String folder){
         _openType = openType;
         _folder = folder;
-        if (openType.equals("Create")){
-            
+        if (openType.equals("Create")) {
+            File f = new File(getPortfolioDetailsFile());
+            if (f.exists())
+            {
+                int userOption = JOptionPane.showConfirmDialog(this,"This Portfilio already exists, do you want to overwrite?", "Overwrite Portfolio", JOptionPane.ERROR_MESSAGE);
+                // 0=yes, 1=no, 2=cancel
+                if (userOption != 0)        // no or cancel
+                {
+                    JOptionPane.showMessageDialog(this, "Cancel", "Overwrite Portfolio?", JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+                JOptionPane.showMessageDialog(this, "You chose to overwrite the portfolio.", "Overwrite Portfolio?", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
-        folderLocationBox.setText(folder);
+        
+        _portfolio = new Portfolio(_folder);
+        if (openType.equals("Create")){
+            _portfolio.setName("Portfolio 1");
+            _portfolio.setDescription("Portfolio 12");
+            _portfolio.setAccountNumber("Portfolio 123");
+            _portfolio.setDateOpened(LocalDate.now());
+        }
+        else {
+            readPortfolio();
+        }
+        
+        fillPortfolioScreen();
+        return true;
     }
+    
+
     private void folderLocationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_folderLocationBoxActionPerformed
         // TODO add your handling code here:
 
     }//GEN-LAST:event_folderLocationBoxActionPerformed
 
+    private void nameBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nameBoxActionPerformed
+
+    private void accountNumberBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountNumberBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_accountNumberBoxActionPerformed
+
+    private void savePortfolioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePortfolioActionPerformed
+        // TODO add your handling code here:
+        fillPortfolioObject();
+        saveToFile();
+    }//GEN-LAST:event_savePortfolioActionPerformed
+
+    private void marketClosingPricesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_marketClosingPricesActionPerformed
+        // TODO add your handling code here:
+        MarketClosingPricesWindow window = new MarketClosingPricesWindow();
+        window.initialize(_portfolio);
+        window.setVisible(true);
+    }//GEN-LAST:event_marketClosingPricesActionPerformed
+
+    private void manageStockTradesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageStockTradesActionPerformed
+        // TODO add your handling code here:
+        ManageStockTradesWindow window = new ManageStockTradesWindow();
+        window.setVisible(true);
+    }//GEN-LAST:event_manageStockTradesActionPerformed
+
+    private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_calculateButtonActionPerformed
+    
+
+    
+    private void fillPortfolioScreen()
+    {
+        nameBox.setText(_portfolio.getName());
+        descriptionBox.setText(_portfolio.getDescription());
+        folderLocationBox.setText(_portfolio.getFolder());
+        accountNumberBox.setText(_portfolio.getAccountNumber());
+        dateOpenedBox.setText(_portfolio.getDateOpened().toString());
+        numberOfStocksBox.setText(Integer.toString(_portfolio.getNumberOfStocks()));
+    }
+    
+    private void fillPortfolioObject(){
+        _portfolio.setName(nameBox.getText());
+        _portfolio.setDescription(descriptionBox.getText());
+        _portfolio.setAccountNumber(accountNumberBox.getText());
+        LocalDate date = LocalDate.parse(dateOpenedBox.getText());
+        _portfolio.setDateOpened(date);
+        System.out.println(_portfolio);     
+    }
+    
+    private void readPortfolio()
+    {
+        try {
+            String filename = getPortfolioDetailsFile();
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            String line = reader.readLine(); //skipping first line, header
+            System.out.println(line);
+            while ((line = reader.readLine()) != null) {
+              System.out.println(line);
+                String[] x = line.split(",");
+               //String name, String description, String accounNumber, LocalDate dateOpened, ArrayList<StockTrade> trades, String folder)
+               ArrayList<StockTrade> trades = null;
+               _portfolio = new Portfolio(x[0], x[1], x[2], LocalDate.parse(x[3]), _folder);
+            }
+            reader.close(); 
+        }
+        catch (IOException ex)
+         {
+           System.out.println("MY ERROR: file does not exist");
+           ex.printStackTrace();
+         }
+     }
+    
+    //save data in portfolio object into portfolioDetails.txt file
+    private void saveToFile() {
+        String filename = getPortfolioDetailsFile(); 
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+            writer.write("Name,Description,Account Number,Date Opened,Number of Stocks");
+            writer.newLine();
+            writer.write(_portfolio.getName());
+            writer.write("," + _portfolio.getDescription());
+            writer.write("," + _portfolio.getAccountNumber());
+            writer.write("," + _portfolio.getDateOpened());
+            writer.write("," + _portfolio.getNumberOfStocks());
+            writer.newLine();
+            
+            writer.close();
+            JOptionPane.showMessageDialog(this, "Saved!", "Save", JOptionPane.INFORMATION_MESSAGE);
+        }     
+        catch (IOException ex)
+        {
+          System.out.println("MY ERROR: file does not exist");
+          ex.printStackTrace();
+          JOptionPane.showMessageDialog(this, "Error saving to File", "Save", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private String getPortfolioDetailsFile() {
+        return _folder + File.separator + "PortfolioDetails.txt";
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -359,6 +556,8 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel folderLabel;
     private javax.swing.JTextField folderLocationBox;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

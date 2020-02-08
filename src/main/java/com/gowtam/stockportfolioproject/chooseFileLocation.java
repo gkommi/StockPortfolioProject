@@ -20,6 +20,7 @@ public class chooseFileLocation extends javax.swing.JFrame {
      */
     public chooseFileLocation() {
         initComponents();
+        setTitle("Choose Portfolio Folder");
         this.setDefaultCloseOperation ( JFrame.DISPOSE_ON_CLOSE );
     }
 
@@ -116,6 +117,13 @@ public class chooseFileLocation extends javax.swing.JFrame {
         } else 
             openPortfolioLabel.setText("Open Portfolio");
     }
+    
+    private javax.swing.JFrame _mainWindow;
+    public void setMainWindowToClose(javax.swing.JFrame mainWindow)
+    {
+        _mainWindow = mainWindow;
+    }
+    
     private void fileLocationFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileLocationFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fileLocationFieldActionPerformed
@@ -148,15 +156,18 @@ public class chooseFileLocation extends javax.swing.JFrame {
 
     private void okayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okayButtonActionPerformed
         // TODO add your handling code here:
-        if (_browseType.equals("Create")) {
-            PortfolioMainWindow portfolioWindow = new PortfolioMainWindow();
-            portfolioWindow.initialize(_browseType, fileLocationField.getText());
-         
+        // check if the 
+        PortfolioMainWindow portfolioWindow = new PortfolioMainWindow();
+        if (portfolioWindow.initialize(_browseType, fileLocationField.getText()))
+        {
             portfolioWindow.setVisible(true);
-        } else {
-           JOptionPane.showMessageDialog(this, "Open Portfolio - not ready yet.");
-        }
+            
+            setVisible(false);
+            dispose();
         
+            _mainWindow.setVisible(false);
+            _mainWindow.dispose();
+        }
     }//GEN-LAST:event_okayButtonActionPerformed
 
     /**

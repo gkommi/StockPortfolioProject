@@ -16,6 +16,7 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public MainWindow() {
         initComponents();
+        setTitle("Open/Create Portfolio");
     }
 
     /**
@@ -74,6 +75,7 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         chooseFileLocation create = new chooseFileLocation();
         create.setBrowseType("Create");
+        create.setMainWindowToClose(this);
         create.setVisible(true);
     }//GEN-LAST:event_createPortfolioButtonActionPerformed
 
@@ -81,6 +83,7 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         chooseFileLocation second = new chooseFileLocation();
         second.setBrowseType("Open");
+        second.setMainWindowToClose(this);
         second.setVisible(true);
     }//GEN-LAST:event_openPortfolioButtonActionPerformed
 

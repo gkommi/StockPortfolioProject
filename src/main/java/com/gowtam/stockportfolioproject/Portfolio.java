@@ -33,16 +33,24 @@ convertCommaStringToPortfolio(String)
     
     public Portfolio(String folder)
     {
+        _folder = folder;
+        _trades = new ArrayList<StockTrade>();
     }
     
-    public Portfolio(String name, String description, String accounNumber, LocalDate dateOpened, ArrayList<StockTrade> trades, String folder)
+    public Portfolio(String name, String description, String accountNumber, LocalDate dateOpened, String folder)
     {
+        _name = name;
+        _description = description;
+        _accountNumber = accountNumber;
+        _dateOpened = dateOpened;
+        _folder = folder;
+        _trades = new ArrayList<StockTrade>();
     }
 
     private String _folder;
     private String _name;
     private String _description;
-    private String _accounNumber;
+    private String _accountNumber;
     private LocalDate _dateOpened;
     private ArrayList<StockTrade> _trades;
     
@@ -50,19 +58,28 @@ convertCommaStringToPortfolio(String)
     {
         return _folder;
     }
+    //public void setFolder(String folder)  { _folder = folder; }
     
     public String getName() { return _name; }
-    //public void setName(String name) { _name = name; }
-    public void setName(String name) throws Exception
-    {
-        if (name == null || name.equals(""))
-        {
-            System.err.println("name cannot be null or empty");
-            throw new Exception("name cannot be null or empty");
-        }
-        else
-             _name = name;
-    }
+    public void setName(String name) { _name = name; }
+//    public void setName(String name) throws Exception
+//    {
+//        if (name == null || name.equals(""))
+//        {
+//            System.err.println("name cannot be null or empty");
+//            throw new Exception("name cannot be null or empty");
+//        }
+//        else
+//             _name = name;
+//    }
+    
+    public String getDescription() { return _description; }
+    public void setDescription(String description) { _description = description; }
+
+    
+    public String getAccountNumber() { return _accountNumber; }
+    public void setAccountNumber(String accountNumber) { _accountNumber = accountNumber; } 
+    
     
     public LocalDate getDateOpened() { return _dateOpened; }
     public void setDateOpened(LocalDate dateOpened) { _dateOpened = dateOpened; }
@@ -76,5 +93,12 @@ convertCommaStringToPortfolio(String)
         {
             throw new Exception("bad date format for DateOpened, use yyyy-mm-dd format");
         }
+    }
+    public int getNumberOfStocks() { return _trades.size(); }
+
+    public String toString()
+    {
+        return "Name = " + _name + ", Description = " + _description + ", Account Number = " + _accountNumber + ", Date Opened = " + _dateOpened 
+                + ", Number of Trades = " + _trades.size() + ", Folder Location = " + _folder;
     }
 }
