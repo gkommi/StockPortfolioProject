@@ -30,6 +30,63 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
         this.setDefaultCloseOperation ( JFrame.DISPOSE_ON_CLOSE );
     }
 
+    private String _folder;
+    private String _openType;
+    private Portfolio _portfolio;
+    public boolean initialize(String openType, String folder){
+        _openType = openType;
+        _folder = folder;
+        if (openType.equals("Create")) {
+            File f = new File(Portfolio.getPortfolioDetailsFile(_folder));
+            if (f.exists())
+            {
+                int userOption = JOptionPane.showConfirmDialog(this,"This Portfilio already exists, do you want to overwrite?", "Overwrite Portfolio", JOptionPane.ERROR_MESSAGE);
+                // 0=yes, 1=no, 2=cancel
+                if (userOption != 0)        // no or cancel
+                {
+                    JOptionPane.showMessageDialog(this, "Cancel", "Overwrite Portfolio?", JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+                JOptionPane.showMessageDialog(this, "You chose to overwrite the portfolio.", "Overwrite Portfolio?", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        
+        if (openType.equals("Create")){
+            _portfolio = new Portfolio(_folder);
+            _portfolio.setName("Portfolio 1");
+            _portfolio.setDescription("Portfolio 12");
+            _portfolio.setAccountNumber("Portfolio 123");
+            _portfolio.setDateOpened(LocalDate.now());
+        }
+        else {
+            _portfolio = Portfolio.readPortfolio(_folder);
+        }
+        
+        fillPortfolioScreen();
+        return true;
+    }
+    
+
+    
+    private void fillPortfolioScreen()
+    {
+        nameBox.setText(_portfolio.getName());
+        descriptionBox.setText(_portfolio.getDescription());
+        folderLocationBox.setText(_portfolio.getFolder());
+        accountNumberBox.setText(_portfolio.getAccountNumber());
+        dateOpenedBox.setText(_portfolio.getDateOpened().toString());
+        numberOfStocksBox.setText(Integer.toString(_portfolio.getNumberOfStocks()));
+    }
+    
+    private void fillPortfolioObject(){
+        _portfolio.setName(nameBox.getText());
+        _portfolio.setDescription(descriptionBox.getText());
+        _portfolio.setAccountNumber(accountNumberBox.getText());
+        LocalDate date = LocalDate.parse(dateOpenedBox.getText());
+        _portfolio.setDateOpened(date);
+        System.out.println(_portfolio);     
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -109,6 +166,7 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Your Portfolio");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Portfolio Details"));
 
@@ -361,42 +419,6 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private String _folder;
-    private String _openType;
-    private Portfolio _portfolio;
-    public boolean initialize(String openType, String folder){
-        _openType = openType;
-        _folder = folder;
-        if (openType.equals("Create")) {
-            File f = new File(getPortfolioDetailsFile());
-            if (f.exists())
-            {
-                int userOption = JOptionPane.showConfirmDialog(this,"This Portfilio already exists, do you want to overwrite?", "Overwrite Portfolio", JOptionPane.ERROR_MESSAGE);
-                // 0=yes, 1=no, 2=cancel
-                if (userOption != 0)        // no or cancel
-                {
-                    JOptionPane.showMessageDialog(this, "Cancel", "Overwrite Portfolio?", JOptionPane.INFORMATION_MESSAGE);
-                    return false;
-                }
-                JOptionPane.showMessageDialog(this, "You chose to overwrite the portfolio.", "Overwrite Portfolio?", JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
-        
-        _portfolio = new Portfolio(_folder);
-        if (openType.equals("Create")){
-            _portfolio.setName("Portfolio 1");
-            _portfolio.setDescription("Portfolio 12");
-            _portfolio.setAccountNumber("Portfolio 123");
-            _portfolio.setDateOpened(LocalDate.now());
-        }
-        else {
-            readPortfolio();
-        }
-        
-        fillPortfolioScreen();
-        return true;
-    }
-    
 
     private void folderLocationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_folderLocationBoxActionPerformed
         // TODO add your handling code here:
@@ -414,7 +436,7 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
     private void savePortfolioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePortfolioActionPerformed
         // TODO add your handling code here:
         fillPortfolioObject();
-        saveToFile();
+        Portfolio.saveToFile(_folder, _portfolio);
     }//GEN-LAST:event_savePortfolioActionPerformed
 
     private void marketClosingPricesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_marketClosingPricesActionPerformed
@@ -427,6 +449,7 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
     private void manageStockTradesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageStockTradesActionPerformed
         // TODO add your handling code here:
         ManageStockTradesWindow window = new ManageStockTradesWindow();
+        window.initialize(_portfolio);
         window.setVisible(true);
     }//GEN-LAST:event_manageStockTradesActionPerformed
 
@@ -434,79 +457,6 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         
     }//GEN-LAST:event_calculateButtonActionPerformed
-    
-
-    
-    private void fillPortfolioScreen()
-    {
-        nameBox.setText(_portfolio.getName());
-        descriptionBox.setText(_portfolio.getDescription());
-        folderLocationBox.setText(_portfolio.getFolder());
-        accountNumberBox.setText(_portfolio.getAccountNumber());
-        dateOpenedBox.setText(_portfolio.getDateOpened().toString());
-        numberOfStocksBox.setText(Integer.toString(_portfolio.getNumberOfStocks()));
-    }
-    
-    private void fillPortfolioObject(){
-        _portfolio.setName(nameBox.getText());
-        _portfolio.setDescription(descriptionBox.getText());
-        _portfolio.setAccountNumber(accountNumberBox.getText());
-        LocalDate date = LocalDate.parse(dateOpenedBox.getText());
-        _portfolio.setDateOpened(date);
-        System.out.println(_portfolio);     
-    }
-    
-    private void readPortfolio()
-    {
-        try {
-            String filename = getPortfolioDetailsFile();
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
-            String line = reader.readLine(); //skipping first line, header
-            System.out.println(line);
-            while ((line = reader.readLine()) != null) {
-              System.out.println(line);
-                String[] x = line.split(",");
-               //String name, String description, String accounNumber, LocalDate dateOpened, ArrayList<StockTrade> trades, String folder)
-               ArrayList<StockTrade> trades = null;
-               _portfolio = new Portfolio(x[0], x[1], x[2], LocalDate.parse(x[3]), _folder);
-            }
-            reader.close(); 
-        }
-        catch (IOException ex)
-         {
-           System.out.println("MY ERROR: file does not exist");
-           ex.printStackTrace();
-         }
-     }
-    
-    //save data in portfolio object into portfolioDetails.txt file
-    private void saveToFile() {
-        String filename = getPortfolioDetailsFile(); 
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-            writer.write("Name,Description,Account Number,Date Opened,Number of Stocks");
-            writer.newLine();
-            writer.write(_portfolio.getName());
-            writer.write("," + _portfolio.getDescription());
-            writer.write("," + _portfolio.getAccountNumber());
-            writer.write("," + _portfolio.getDateOpened());
-            writer.write("," + _portfolio.getNumberOfStocks());
-            writer.newLine();
-            
-            writer.close();
-            JOptionPane.showMessageDialog(this, "Saved!", "Save", JOptionPane.INFORMATION_MESSAGE);
-        }     
-        catch (IOException ex)
-        {
-          System.out.println("MY ERROR: file does not exist");
-          ex.printStackTrace();
-          JOptionPane.showMessageDialog(this, "Error saving to File", "Save", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private String getPortfolioDetailsFile() {
-        return _folder + File.separator + "PortfolioDetails.txt";
-    }
     
     /**
      * @param args the command line arguments

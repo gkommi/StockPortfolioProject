@@ -21,11 +21,11 @@ import java.util.Arrays;
  */
 public class StockPriceDownloader {
     //API Key
-    private static final String API_KEY = "demo";
+    //private static final String API_KEY = "demo";
     private static final String API_URL_DEMO_CSV = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT&apikey=demo&datatype=csv";
     private static final String API_URL_DEMO_JSON = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=demo";
     
-    //private static final String API_KEY = "2J3WAYJY09SFK2WM";
+    private static final String API_KEY = "2J3WAYJY09SFK2WM";
     public static final String BASE_URI = "https://www.alphavantage.co/query?";
     public static final String REST_API_URI = BASE_URI + "function=TIME_SERIES_DAILY_ADJUSTED&apikey=" + API_KEY;
     

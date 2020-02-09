@@ -5,6 +5,9 @@
  */
 package com.gowtam.stockportfolioproject;
 
+import java.util.ArrayList;
+import java.time.LocalDate;
+
 /**
  *
  * @author 1687968
@@ -17,4 +20,11 @@ Date: StartDate
 Date: EndDate
 Calculate(): ArrayList<StockValue>
     */  
+    
+    public ArrayList<StockResultRow> Calculate(Portfolio portfolio, LocalDate startDate, LocalDate endDate)
+    {
+        ArrayList<StockResultRow> results = new ArrayList<>();
+        
+        return results;
+    }
 }
