@@ -13,6 +13,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import javax.swing.JOptionPane;
 
 /**
@@ -145,4 +147,39 @@ public class StockPrice implements Comparable {
         return folder + File.separator + "StockPrices.txt";
     }
 
+    // merge new prices into pricesList
+    // if new price exists in the old list, we will replace
+    public static void mergePrices(ArrayList<StockPrice> pricesList, final ArrayList<StockPrice>newPricesList)
+    {
+        HashSet<String> keys = new HashSet<>();
+        HashSet<StockPrice> uniquePrices = new HashSet<>();
+        String key;
+        
+        // add new prices first
+        for (StockPrice price : newPricesList)
+        {
+            key = price.Ticker() + price.CloseDate();
+            if (!keys.contains(key))
+            {
+                uniquePrices.add(price);
+                keys.add(key);
+            }
+        }
+        
+        // add prices old pricesList
+        for (StockPrice price : pricesList)
+        {
+            key = price.Ticker() + price.CloseDate();
+            if (!keys.contains(key))
+            {
+                uniquePrices.add(price);
+                keys.add(key);
+            }
+        }
+        
+        pricesList.clear();
+        pricesList.addAll(uniquePrices);
+        
+        Collections.sort(pricesList);
+    }
 }
