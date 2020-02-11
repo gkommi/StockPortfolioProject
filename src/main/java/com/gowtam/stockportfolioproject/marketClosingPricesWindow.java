@@ -5,19 +5,88 @@
  */
 package com.gowtam.stockportfolioproject;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author 1687968
  */
-public class marketClosingPricesWindow extends javax.swing.JFrame {
+public class MarketClosingPricesWindow extends javax.swing.JFrame {
 
     /**
      * Creates new form marketClosingPricesWindow
      */
-    public marketClosingPricesWindow() {
+    public MarketClosingPricesWindow() {
         initComponents();
     }
 
+    private Portfolio _portfolio;
+    private DefaultTableModel _model;
+    private ArrayList<StockPrice> _pricesList;      // holds all prices read from file
+    
+    public void initialize(Portfolio portfolio)
+    {
+        _portfolio = portfolio;
+        
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
+        todaysDateField.setDate(today);
+        
+        cal.add(Calendar.DATE, -7);        // go back 1 week
+        latestPricesDateField.setDate(cal.getTime());
+        
+        _model = (DefaultTableModel) mcpTable.getModel();
+        _model.setRowCount(0);      // clear table
+
+        _pricesList = StockPrice.readPrices(_portfolio.getFolder());
+        
+        loadPricesToTable(_pricesList);
+    }
+    
+    private void loadPricesToTable(List<StockPrice> priceByTicker)
+    {
+        //Clear table
+        _model.setRowCount(0);
+            
+        //List<StockPrice> priceByTicker = pricesList.get(ticker);
+        for (StockPrice p : priceByTicker)
+        {
+            System.out.printf("%s %s %.4f\n", p.Ticker(), p.CloseDate(), p.ClosePrice());
+
+            _model.addRow(new Object[] {p.Ticker(), p.CloseDate(), p.ClosePrice()});
+        }
+        System.out.println();
+    }
+    
+    private void downloadPrices(LocalDate fromDate)
+    {
+        StockPriceDownloader downloader = new StockPriceDownloader();
+        ArrayList<String> allTickers = _portfolio.getAllTickersInTrades();
+        
+        ArrayList<StockPrice> newPricesList = new ArrayList<>();
+        for (String ticker : allTickers)
+        {
+            ArrayList<StockPrice> pricesList = downloader.getPrices(ticker, fromDate);
+            newPricesList.addAll(pricesList);
+        }
+        
+        Collections.sort(newPricesList);
+        loadPricesToTable(newPricesList);
+
+        StockPrice.mergePrices(_pricesList, newPricesList);
+        _portfolio.setPrices(_pricesList);
+        StockPrice.savePricesToFile(_pricesList, _portfolio.getFolder());
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,24 +97,26 @@ public class marketClosingPricesWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         todaysDateMCP = new javax.swing.JLabel();
-        todaysDateFieldMCP = new javax.swing.JTextField();
         latestPricesLabel = new javax.swing.JLabel();
-        latestPricesDateField = new javax.swing.JTextField();
         downloadPricesButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         mcpTable = new javax.swing.JTable();
+        todaysDateField = new org.jdesktop.swingx.JXDatePicker();
+        latestPricesDateField = new org.jdesktop.swingx.JXDatePicker();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Market Closing Prices");
 
         todaysDateMCP.setText("Todays Date");
 
-        todaysDateFieldMCP.setText("jTextField1");
-
-        latestPricesLabel.setText("Latest Prices");
-
-        latestPricesDateField.setText("jTextField1");
+        latestPricesLabel.setText("Load Prices From");
 
         downloadPricesButton.setText("Download Prices");
+        downloadPricesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downloadPricesButtonActionPerformed(evt);
+            }
+        });
 
         mcpTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -55,18 +126,21 @@ public class marketClosingPricesWindow extends javax.swing.JFrame {
                 {null, null, null}
             },
             new String [] {
-                "Date", "Security Ticker", "Closing Price"
+                "Security Ticker", "Date", "Closing Price"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.Double.class
+                java.lang.String.class, java.lang.Object.class, java.lang.Double.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+        mcpTable.setEnabled(false);
         jScrollPane1.setViewportView(mcpTable);
+
+        todaysDateField.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -75,47 +149,48 @@ public class marketClosingPricesWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(todaysDateMCP)
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(latestPricesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(todaysDateMCP))
                         .addGap(18, 18, 18)
-                        .addComponent(todaysDateFieldMCP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(latestPricesDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(todaysDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(downloadPricesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(latestPricesLabel)
-                        .addGap(18, 18, 18)
-                        .addComponent(latestPricesDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(downloadPricesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(todaysDateMCP)
-                            .addComponent(todaysDateFieldMCP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(latestPricesLabel)
-                            .addComponent(latestPricesDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(downloadPricesButton)))
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(todaysDateMCP)
+                    .addComponent(todaysDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(latestPricesLabel)
+                    .addComponent(latestPricesDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(downloadPricesButton))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void downloadPricesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadPricesButtonActionPerformed
+        // TODO add your handling code here:
+        Date date = latestPricesDateField.getDate();
+        LocalDate fromDate = Conversions.convertToLocalDate(date);
+        
+        downloadPrices(fromDate);
+    }//GEN-LAST:event_downloadPricesButtonActionPerformed
+    
     /**
      * @param args the command line arguments
      */
@@ -133,20 +208,21 @@ public class marketClosingPricesWindow extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(marketClosingPricesWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MarketClosingPricesWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(marketClosingPricesWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MarketClosingPricesWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(marketClosingPricesWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MarketClosingPricesWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(marketClosingPricesWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MarketClosingPricesWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new marketClosingPricesWindow().setVisible(true);
+                new MarketClosingPricesWindow().setVisible(true);
             }
         });
     }
@@ -154,10 +230,10 @@ public class marketClosingPricesWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton downloadPricesButton;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField latestPricesDateField;
+    private org.jdesktop.swingx.JXDatePicker latestPricesDateField;
     private javax.swing.JLabel latestPricesLabel;
     private javax.swing.JTable mcpTable;
-    private javax.swing.JTextField todaysDateFieldMCP;
+    private org.jdesktop.swingx.JXDatePicker todaysDateField;
     private javax.swing.JLabel todaysDateMCP;
     // End of variables declaration//GEN-END:variables
 }
