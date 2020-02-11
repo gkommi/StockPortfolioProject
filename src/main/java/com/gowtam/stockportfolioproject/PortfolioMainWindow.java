@@ -8,12 +8,6 @@ package com.gowtam.stockportfolioproject;
 import java.time.LocalDate;
 import javax.swing.JFrame;
 import java.io.File;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**

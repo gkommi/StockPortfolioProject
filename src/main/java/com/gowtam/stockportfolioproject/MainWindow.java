@@ -73,7 +73,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void createPortfolioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createPortfolioButtonActionPerformed
         // TODO add your handling code here:
-        chooseFileLocation create = new chooseFileLocation();
+        ChooseFileLocation create = new ChooseFileLocation();
         create.setBrowseType("Create");
         create.setMainWindowToClose(this);
         create.setVisible(true);
@@ -81,7 +81,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void openPortfolioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openPortfolioButtonActionPerformed
         // TODO add your handling code here:
-        chooseFileLocation second = new chooseFileLocation();
+        ChooseFileLocation second = new ChooseFileLocation();
         second.setBrowseType("Open");
         second.setMainWindowToClose(this);
         second.setVisible(true);
