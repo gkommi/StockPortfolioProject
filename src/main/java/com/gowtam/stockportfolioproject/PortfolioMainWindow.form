@@ -330,15 +330,15 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="322" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="172" max="-2" attributes="0"/>
                   <Component id="startDateLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="startDateField" min="-2" pref="95" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="startDateJXDatePicker" min="-2" pref="178" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
                   <Component id="endDateLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="endDateField" min="-2" pref="95" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="endDateJXDatePicker" min="-2" pref="180" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="calculateButton" min="-2" pref="125" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -361,10 +361,10 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="startDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="startDateField" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="endDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="endDateField" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="calculateButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="startDateJXDatePicker" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="endDateJXDatePicker" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="282" max="32767" attributes="0"/>
               </Group>
@@ -383,11 +383,6 @@
         <Component class="javax.swing.JLabel" name="endDateLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="End Date:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="endDateField">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jTextField8"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane3">
@@ -483,10 +478,12 @@
             <Property name="text" type="java.lang.String" value="Start Date:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="startDateField">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jTextField7"/>
-          </Properties>
+        <Component class="org.jdesktop.swingx.JXDatePicker" name="startDateJXDatePicker">
+        </Component>
+        <Component class="org.jdesktop.swingx.JXDatePicker" name="endDateJXDatePicker">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="endDateJXDatePickerActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

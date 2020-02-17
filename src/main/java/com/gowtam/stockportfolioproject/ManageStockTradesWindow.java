@@ -59,9 +59,9 @@ public class ManageStockTradesWindow extends javax.swing.JFrame {
     {
         for (StockTrade s : list)
         {
-            System.out.println(s.Ticker() + " " + s.Quantity() + " " + s.PurchaseDate() + " " + s.PurchasePrice());
+            System.out.println(s.getTicker() + " " + s.getQuantity() + " " + s.getPurchaseDate() + " " + s.getPurchasePrice());
 
-            model.addRow(new Object[] {s.Ticker(), s.Quantity(), s.PurchaseDate(), s.PurchasePrice()});
+            model.addRow(new Object[] {s.getTicker(), s.getQuantity(), s.getPurchaseDate(), s.getPurchasePrice()});
         }
         System.out.println();
     }

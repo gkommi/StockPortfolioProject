@@ -7,6 +7,7 @@ package com.gowtam.stockportfolioproject;
 
 import java.util.ArrayList;
 import java.time.LocalDate;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,10 +22,87 @@ Date: EndDate
 Calculate(): ArrayList<StockValue>
     */  
     
-    public ArrayList<StockResultRow> Calculate(Portfolio portfolio, LocalDate startDate, LocalDate endDate)
+    public Calculator()
     {
-        ArrayList<StockResultRow> results = new ArrayList<>();
+    
+    }
+    
+    public ArrayList<StockValue> Calculate(Portfolio portfolio, LocalDate startDate, LocalDate endDate)
+    {
+        ArrayList<StockValue> stockValues = new ArrayList<>();
+
+        for (StockTrade trade : portfolio.getTrades())
+        {
+            StockValue value = CalculateForOneTrade(trade, startDate, endDate, portfolio.getPrices());
+            //add to the stockValues list
+            stockValues.add(value);
+        }
+
+        //return the final results
         
-        return results;
+        return stockValues;
+    }
+    
+    public StockValue CalculateForOneTrade(StockTrade trade, LocalDate startDate, LocalDate endDate, ArrayList<StockPrice> prices)
+    {
+        double startPrice = 0;
+        double endPrice = 0;
+        double endMarketValue = 0;
+        double profitLoss = 0;
+        boolean isError = false;
+        //calculate profit and loss for each stock trade
+
+        if (startDate.isBefore(trade.getPurchaseDate()))
+        {
+            startPrice = trade.getPurchasePrice();
+        } 
+        else 
+        {
+            startPrice = getStartPrice(prices, trade.getTicker(), startDate);
+        }
+        endPrice = getEndPrice(prices, trade.getTicker(), endDate);
+        if (endPrice > 0)
+        {
+            endMarketValue = endPrice * trade.getQuantity();
+        }
+        
+        if (startPrice > 0 && endPrice > 0)
+        {
+            profitLoss = endMarketValue - (startPrice * trade.getQuantity());
+        } else
+        {
+            isError = true;
+        }
+            
+        
+        //save values into stock value object
+        StockValue value = new StockValue(trade,startPrice, endPrice, endMarketValue, profitLoss, isError);
+        //add to the stockValues list
+
+        return value;
+    }
+    
+    private double getStartPrice(ArrayList<StockPrice> prices, String ticker, LocalDate date)
+    {
+        for (StockPrice price : prices)
+        {
+            if (price.getTicker().equals(ticker) && price.getCloseDate().equals(date))
+            {
+                return price.getClosePrice();
+            }
+        }    
+        return -1;
+    }
+    
+    private double getEndPrice(ArrayList<StockPrice> prices, String ticker, LocalDate date)
+    {
+        for (StockPrice price : prices)
+        {
+            if (price.getTicker().equals(ticker) && price.getCloseDate().equals(date))
+            {
+                return price.getClosePrice();
+            }
+        }    
+        return -1;
     }
 }

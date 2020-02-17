@@ -57,9 +57,9 @@ public class MarketClosingPricesWindow extends javax.swing.JFrame {
         //List<StockPrice> priceByTicker = pricesList.get(ticker);
         for (StockPrice p : priceByTicker)
         {
-            System.out.printf("%s %s %.4f\n", p.Ticker(), p.CloseDate(), p.ClosePrice());
+            System.out.printf("%s %s %.4f\n", p.getTicker(), p.getCloseDate(), p.getClosePrice());
 
-            _model.addRow(new Object[] {p.Ticker(), p.CloseDate(), p.ClosePrice()});
+            _model.addRow(new Object[] {p.getTicker(), p.getCloseDate(), p.getClosePrice()});
         }
         System.out.println();
     }
@@ -139,6 +139,12 @@ public class MarketClosingPricesWindow extends javax.swing.JFrame {
 
         todaysDateField.setEditable(false);
 
+        latestPricesDateField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                latestPricesDateFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -187,6 +193,10 @@ public class MarketClosingPricesWindow extends javax.swing.JFrame {
         
         downloadPrices(fromDate);
     }//GEN-LAST:event_downloadPricesButtonActionPerformed
+
+    private void latestPricesDateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_latestPricesDateFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_latestPricesDateFieldActionPerformed
     
     /**
      * @param args the command line arguments

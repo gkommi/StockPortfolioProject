@@ -48,19 +48,19 @@ convertCommaStringToStockTrade(String)
         _purchasePrice = purchasePrice;
     }
     
-    public String Ticker()
+    public String getTicker()
     {
         return _ticker;
     }
-    public int Quantity()
+    public int getQuantity()
     {
         return _quantity;
     }
-    public LocalDate PurchaseDate()
+    public LocalDate getPurchaseDate()
     {
         return _purchaseDate;
     }
-    public double PurchasePrice()
+    public double getPurchasePrice()
     {
         return _purchasePrice;
     }

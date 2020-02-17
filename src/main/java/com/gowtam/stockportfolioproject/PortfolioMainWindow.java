@@ -8,7 +8,11 @@ package com.gowtam.stockportfolioproject;
 import java.time.LocalDate;
 import javax.swing.JFrame;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -27,6 +31,8 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
     private String _folder;
     private String _openType;
     private Portfolio _portfolio;
+    private DefaultTableModel _model;   //model for stocksDataTable
+    
     public boolean initialize(String openType, String folder){
         _openType = openType;
         _folder = folder;
@@ -56,11 +62,61 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
             _portfolio = Portfolio.readPortfolio(_folder);
         }
         
+        //Initialize startDate and endDate
+        Calendar cal = Calendar.getInstance();  //get today's date
+        cal = Conversions.adjustDate(cal);  //adjust if the date is a weekend
+        endDateJXDatePicker.setDate(cal.getTime());
+        
+        cal.add(Calendar.DATE, -7);        // go back 1 week
+        startDateJXDatePicker.setDate(cal.getTime());
+        
+        _model = (DefaultTableModel) stocksDataTable.getModel();
+        _model.setRowCount(0);      // clear table
+        
         fillPortfolioScreen();
+        
+        calculateAndFillStockValuesScreen();
         return true;
     }
     
+    private void calculateAndFillStockValuesScreen()
+    {
+        System.out.println("calculateAndFillStockValuesScreen():");
+        
+        LocalDate startDate = Conversions.convertToLocalDate(startDateJXDatePicker.getDate());
+        LocalDate endDate = Conversions.convertToLocalDate(endDateJXDatePicker.getDate());
+        Calculator calculator = new Calculator();
+        ArrayList<StockValue> stockValues = calculator.Calculate(_portfolio, startDate, endDate);
+        
 
+        checkErrors(stockValues);
+        
+        _model.setRowCount(0);      // clear table
+        for (StockValue s : stockValues)
+        {
+            System.out.println(s.toString());
+
+            _model.addRow(new Object[] {s.getTicker(), s.getPurchaseDate(), s.getQuantity(), s.getPurchasePrice(),
+                s.getStartPrice(), s.getEndPrice(), s.getEndMarketValue(), s.getProfitLoss()});
+        }
+        System.out.println();
+    }
+    
+    private void checkErrors(ArrayList<StockValue> stockValues)
+    {
+       int numErrors = 0;
+       for (StockValue value : stockValues)
+       {
+            if (value.getError())
+            {
+                numErrors++;
+            }
+        }
+        if (numErrors > 0)
+        {
+            JOptionPane.showMessageDialog(null, "Unable to find prices. There were " + numErrors + " errors.", "Error in calculation.", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     
     private void fillPortfolioScreen()
     {
@@ -114,13 +170,13 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
         savePortfolio = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         endDateLabel = new javax.swing.JLabel();
-        endDateField = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         stocksDataTable = new javax.swing.JTable();
         stockTradesLabel = new javax.swing.JLabel();
         calculateButton = new javax.swing.JButton();
         startDateLabel = new javax.swing.JLabel();
-        startDateField = new javax.swing.JTextField();
+        startDateJXDatePicker = new org.jdesktop.swingx.JXDatePicker();
+        endDateJXDatePicker = new org.jdesktop.swingx.JXDatePicker();
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -308,8 +364,6 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
 
         endDateLabel.setText("End Date:");
 
-        endDateField.setText("jTextField8");
-
         stocksDataTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
@@ -339,22 +393,26 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
 
         startDateLabel.setText("Start Date:");
 
-        startDateField.setText("jTextField7");
+        endDateJXDatePicker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                endDateJXDatePickerActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(322, 322, 322)
+                .addGap(172, 172, 172)
                 .addComponent(startDateLabel)
-                .addGap(18, 18, 18)
-                .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(startDateJXDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(66, 66, 66)
                 .addComponent(endDateLabel)
-                .addGap(18, 18, 18)
-                .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(endDateJXDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
                 .addComponent(calculateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -372,10 +430,10 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startDateLabel)
-                    .addComponent(startDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(endDateLabel)
-                    .addComponent(endDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(calculateButton))
+                    .addComponent(calculateButton)
+                    .addComponent(startDateJXDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(endDateJXDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(282, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
@@ -449,8 +507,13 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
 
     private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
         // TODO add your handling code here:
-        
+        calculateAndFillStockValuesScreen();
+        JOptionPane.showMessageDialog(null, "Calculation complete.", "Calculate", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_calculateButtonActionPerformed
+
+    private void endDateJXDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDateJXDatePickerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_endDateJXDatePickerActionPerformed
     
     /**
      * @param args the command line arguments
@@ -495,7 +558,7 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel dateOpenedLabel;
     private javax.swing.JTextField descriptionBox;
     private javax.swing.JLabel descriptionLabel;
-    private javax.swing.JTextField endDateField;
+    private org.jdesktop.swingx.JXDatePicker endDateJXDatePicker;
     private javax.swing.JLabel endDateLabel;
     private javax.swing.JLabel folderLabel;
     private javax.swing.JTextField folderLocationBox;
@@ -515,7 +578,7 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel numberOfStocksLabel;
     private java.awt.Panel panel1;
     private javax.swing.JButton savePortfolio;
-    private javax.swing.JTextField startDateField;
+    private org.jdesktop.swingx.JXDatePicker startDateJXDatePicker;
     private javax.swing.JLabel startDateLabel;
     private javax.swing.JLabel stockTradesLabel;
     private javax.swing.JTable stocksDataTable;

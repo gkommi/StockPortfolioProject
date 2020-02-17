@@ -119,7 +119,7 @@ convertCommaStringToPortfolio(String)
         Set<String> set = new HashSet<>();
         for (StockTrade t : _trades)
         {
-            set.add(t.Ticker());
+            set.add(t.getTicker());
         }
         
         ArrayList<String> tickers = new ArrayList<>(set);

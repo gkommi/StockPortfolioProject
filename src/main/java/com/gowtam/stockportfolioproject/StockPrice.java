@@ -38,15 +38,15 @@ public class StockPrice implements Comparable {
         convertFromCommaString(commaSepString);
     }
     
-    public LocalDate CloseDate()
+    public LocalDate getCloseDate()
     {
         return _date;
     }
-    public String Ticker()
+    public String getTicker()
     {
         return _ticker;
     }
-    public double ClosePrice()
+    public double getClosePrice()
     {
         return _close;
     }
@@ -71,7 +71,7 @@ public class StockPrice implements Comparable {
     public int compareTo(Object arg0)
     {
         StockPrice p = (StockPrice)arg0;
-        int x = this.CloseDate().compareTo(p.CloseDate());
+        int x = this.getCloseDate().compareTo(p.getCloseDate());
         if (x == 0)
         {
             return _ticker.compareTo(p._ticker);
@@ -157,7 +157,7 @@ public class StockPrice implements Comparable {
         // add new prices first
         for (StockPrice price : newPricesList)
         {
-            key = price.Ticker() + price.CloseDate();
+            key = price.getTicker() + price.getCloseDate();
             if (!keys.contains(key))
             {
                 uniquePrices.add(price);
@@ -168,7 +168,7 @@ public class StockPrice implements Comparable {
         // add prices old pricesList
         for (StockPrice price : pricesList)
         {
-            key = price.Ticker() + price.CloseDate();
+            key = price.getTicker() + price.getCloseDate();
             if (!keys.contains(key))
             {
                 uniquePrices.add(price);
