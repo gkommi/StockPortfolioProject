@@ -52,7 +52,7 @@ Calculate(): ArrayList<StockValue>
         boolean isError = false;
         //calculate profit and loss for each stock trade
 
-        if (startDate.isBefore(trade.getPurchaseDate()))
+        if (startDate.isBefore(trade.getPurchaseDate()))        // start date < purchase date
         {
             startPrice = trade.getPurchasePrice();
         } 
@@ -60,7 +60,14 @@ Calculate(): ArrayList<StockValue>
         {
             startPrice = getStartPrice(prices, trade.getTicker(), startDate);
         }
-        endPrice = getEndPrice(prices, trade.getTicker(), endDate);
+        if (endDate.isBefore(trade.getPurchaseDate()))        // if end date < purchase date, end price = purchase price
+        {
+            endPrice = trade.getPurchasePrice();
+        } else
+        {
+            endPrice = getEndPrice(prices, trade.getTicker(), endDate);
+        }
+
         if (endPrice > 0)
         {
             endMarketValue = endPrice * trade.getQuantity();
@@ -73,6 +80,8 @@ Calculate(): ArrayList<StockValue>
         {
             isError = true;
         }
+        
+        
             
         
         //save values into stock value object

@@ -245,6 +245,11 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
         });
 
         numberOfStocksBox.setEditable(false);
+        numberOfStocksBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numberOfStocksBoxActionPerformed(evt);
+            }
+        });
 
         folderLocationBox.setEditable(false);
         folderLocationBox.addActionListener(new java.awt.event.ActionListener() {
@@ -378,7 +383,16 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
             new String [] {
                 "Security Ticker", "Date Purchased", "Quantity", "Purchase Price", "Start Price", "End Price", "End Market Value", "Profit & Loss"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Object.class, java.lang.Long.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        stocksDataTable.setEnabled(false);
         jScrollPane3.setViewportView(stocksDataTable);
 
         stockTradesLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -508,12 +522,17 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
     private void calculateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateButtonActionPerformed
         // TODO add your handling code here:
         calculateAndFillStockValuesScreen();
+        fillPortfolioScreen();
         JOptionPane.showMessageDialog(null, "Calculation complete.", "Calculate", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_calculateButtonActionPerformed
 
     private void endDateJXDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endDateJXDatePickerActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_endDateJXDatePickerActionPerformed
+
+    private void numberOfStocksBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberOfStocksBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_numberOfStocksBoxActionPerformed
     
     /**
      * @param args the command line arguments

@@ -245,6 +245,9 @@
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numberOfStocksBoxActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="folderLocationBox">
           <Properties>
@@ -396,14 +399,14 @@
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="8" rowCount="8">
-                    <Column editable="true" title="Security Ticker" type="java.lang.Object"/>
+                    <Column editable="true" title="Security Ticker" type="java.lang.String"/>
                     <Column editable="true" title="Date Purchased" type="java.lang.Object"/>
-                    <Column editable="true" title="Quantity" type="java.lang.Object"/>
-                    <Column editable="true" title="Purchase Price" type="java.lang.Object"/>
-                    <Column editable="true" title="Start Price" type="java.lang.Object"/>
-                    <Column editable="true" title="End Price" type="java.lang.Object"/>
-                    <Column editable="true" title="End Market Value" type="java.lang.Object"/>
-                    <Column editable="true" title="Profit &amp; Loss" type="java.lang.Object"/>
+                    <Column editable="true" title="Quantity" type="java.lang.Long"/>
+                    <Column editable="true" title="Purchase Price" type="java.lang.Double"/>
+                    <Column editable="true" title="Start Price" type="java.lang.Double"/>
+                    <Column editable="true" title="End Price" type="java.lang.Double"/>
+                    <Column editable="true" title="End Market Value" type="java.lang.Double"/>
+                    <Column editable="true" title="Profit &amp; Loss" type="java.lang.Double"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -450,6 +453,7 @@
                     </Column>
                   </TableColumnModel>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
