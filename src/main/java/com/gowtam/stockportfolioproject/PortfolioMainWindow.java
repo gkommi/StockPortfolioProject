@@ -114,8 +114,9 @@ public class PortfolioMainWindow extends javax.swing.JFrame {
         }
         if (numErrors > 0)
         {
-            JOptionPane.showMessageDialog(null, "Unable to find prices. There were " + numErrors + " errors.", "Error in calculation.", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Unable to find prices. There were " + numErrors + " errors. Download latest prices!", "Error in calculation.", JOptionPane.INFORMATION_MESSAGE);
         }
+        
     }
     
     private void fillPortfolioScreen()

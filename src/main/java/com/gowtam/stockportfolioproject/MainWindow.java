@@ -33,6 +33,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        openPortfolioButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         openPortfolioButton.setText("Open Portfolio");
         openPortfolioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -40,6 +41,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        createPortfolioButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         createPortfolioButton.setText("Create Portfolio");
         createPortfolioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -52,20 +54,20 @@ public class MainWindow extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(76, 76, 76)
+                .addContainerGap(27, Short.MAX_VALUE)
                 .addComponent(openPortfolioButton)
-                .addGap(43, 43, 43)
+                .addGap(18, 18, 18)
                 .addComponent(createPortfolioButton)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addGap(27, 27, 27))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(128, 128, 128)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(111, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(openPortfolioButton)
-                    .addComponent(createPortfolioButton))
-                .addContainerGap(149, Short.MAX_VALUE))
+                    .addComponent(createPortfolioButton)
+                    .addComponent(openPortfolioButton))
+                .addGap(111, 111, 111))
         );
 
         pack();

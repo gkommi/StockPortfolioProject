@@ -7,24 +7,19 @@ package com.gowtam.stockportfolioproject;
 
 import java.util.ArrayList;
 import java.time.LocalDate;
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author 1687968
  */
 public class Calculator {
   /*
-    
 Portfolio: inputPortfolio
 Date: StartDate
 Date: EndDate
 Calculate(): ArrayList<StockValue>
     */  
-    
     public Calculator()
     {
-    
     }
     
     public ArrayList<StockValue> Calculate(Portfolio portfolio, LocalDate startDate, LocalDate endDate)
@@ -37,9 +32,7 @@ Calculate(): ArrayList<StockValue>
             //add to the stockValues list
             stockValues.add(value);
         }
-
         //return the final results
-        
         return stockValues;
     }
     
@@ -51,7 +44,6 @@ Calculate(): ArrayList<StockValue>
         double profitLoss = 0;
         boolean isError = false;
         //calculate profit and loss for each stock trade
-
         if (startDate.isBefore(trade.getPurchaseDate()))        // start date < purchase date
         {
             startPrice = trade.getPurchasePrice();
@@ -81,13 +73,9 @@ Calculate(): ArrayList<StockValue>
             isError = true;
         }
         
-        
-            
-        
         //save values into stock value object
         StockValue value = new StockValue(trade,startPrice, endPrice, endMarketValue, profitLoss, isError);
         //add to the stockValues list
-
         return value;
     }
     
